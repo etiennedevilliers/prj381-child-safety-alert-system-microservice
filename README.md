@@ -2,6 +2,8 @@
 
 Microservices for the PRJ381 Child Safety Project
 
+![diagram](https://i.imgur.com/36B0Xrh.png)
+
 ## Installation
 
 Installation to go here
