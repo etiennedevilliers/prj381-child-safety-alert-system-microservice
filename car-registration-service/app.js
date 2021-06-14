@@ -1,5 +1,4 @@
-// Mongo Stuff
-var mongoose = require('mongoose');
+
 var CarModel = require('./Car').model;
 
 // Express stuff
@@ -20,11 +19,6 @@ GenerateToken = require('./Auth').GenerateToken;
 // Errors
 Errors = require('./Errors');
 
-
-
-console.log("Connecting to server...");
-mongoose.connect('mongodb://db.ludere.co.za/', {useNewUrlParser: true, useUnifiedTopology: true});
-console.log("Connected to the Ludere DB:)");
 
 app.post('/RegisterCar', (req, res) => {
     console.log(req.body)
