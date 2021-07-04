@@ -15,7 +15,7 @@ app.use(bodyParser.raw());
 const port = 3000
 
 // Auth
-GenerateToken = require('./Auth').GenerateToken;
+const Auth = require('../auth/Auth');
 
 // Errors
 Errors = require('../Errors');
@@ -30,7 +30,7 @@ app.post('/RegisterCar', (req, res) => {
     } else if (req.body['numberplate'] == null || req.body['numberplate'] === '')  {
         res.statusCode = 201;
         res.send(Errors.NoNumberPlate);
-    } else if (req.body['AllowedEmails'] == null || req.body['AllowedEmails'].length == 0 ) {
+    } else if (req.body['AllowedEmails'] == null) {
         res.statusCode = 201;
         res.send(Errors.MailError);
     } else {
@@ -38,26 +38,35 @@ app.post('/RegisterCar', (req, res) => {
             CarID : req.body['numberplate'],
             AllowedEmails : req.body['AllowedEmails'],
             LastRecieved: Math.floor(new Date().getTime() / 1000),
-            AuthorizationToken: GenerateToken()
         };
 
         CarModel(car).findByCarUid((err, cars) => {
-            if (cars.length > 0) {
-                res.status(401).send(Errors.CarAlreadyExists);
+            if (err) {
+                console.log(err);
+                res.status(401).send(Errors.InternalServerError);
             } else {
-                CarModel.create(car).then((result) => {
-                    res.send(result);
-                })
+                if (cars.length > 0) {
+                    res.status(401).send(Errors.CarAlreadyExists);
+                } else {
+                    CarModel.create(car).then((result) => {
+                        res.send({
+                            'car':result,
+                            jwt : "random token"
+                        });
+                    });
+                }
             }
         });
     }
 });
 
 console.log("Connecting to server...");
-mongoose.connect('mongodb://localhost/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true});
-console.log("Connected to the Ludere DB:)");
-
-
-app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`);
+mongoose.connect('mongodb://localhost/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
+    console.log("Connected to the Ludere DB:)");
+    app.listen(port, () => {
+        console.log(`App listening at http://localhost:${port}`);
+    });
+}).catch((err) => {
+    console.log(err);
 });
+
