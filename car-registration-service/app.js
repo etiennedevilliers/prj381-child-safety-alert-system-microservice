@@ -31,15 +31,28 @@ app.post('/RegisterCar', (req, res) => {
         res.send(Errors.NoNumberPlate);
 
     } else {
-        CarModel.create({
+        let car = {
             CarID : req.body['numberplate'],
             LastRecieved: Math.floor(new Date().getTime() / 1000),
             AuthorizationToken: GenerateToken()
-        }).then((result) => {
-            res.send(result);
-        })
+        };
+
+        CarModel(car).findByCarUid((err, cars) => {
+            if (cars.length > 0) {
+                res.status(401).send({'error':'car already exists'});
+            } else {
+                CarModel.create(car).then((result) => {
+                    res.send(result);
+                })
+            }
+        });
     }
 });
+
+console.log("Connecting to server...");
+mongoose.connect('mongodb://localhost/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true});
+console.log("Connected to the Ludere DB:)");
+
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`)
