@@ -1,8 +1,16 @@
 const jwt = require('jsonwebtoken');
+var nodemailer = require('nodemailer');
 
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'away12857@gmail.com',
+    pass: 'pxU6D3oOSz@gKugfZ#4D'
+  }
+});
 
-function GenerateAccessToken(carID) {
-    return jwt.sign({'numberplate': carID}, process.env.TOKEN_SECRET, { });
+function GenerateAccessToken(body) {
+    return jwt.sign(body, process.env.TOKEN_SECRET, { });
 }
 
 function AuthenticateToken(req, res, next) {
@@ -12,17 +20,55 @@ function AuthenticateToken(req, res, next) {
     if (token == null) return res.sendStatus(401)
   
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-      console.log(err)
-  
       if (err) return res.sendStatus(403)
   
       req.user = user
-  
-      next()
-    })
+      res.setHeader('Content-Type', 'application/json');
+      next();
+    });
+}
+function generateRandomString(length) {
+  var result           = '';
+  var characters       = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
+  return result;
+}
+
+function GenerateOTP() {
+
+    return {
+      token : generateRandomString(5), 
+      TokenID :generateRandomString(40)
+    };
+}
+
+function SendEmail(email, subject, body) {
+  var mailOptions = {
+    from: process.env.NODE_EMAIL,
+    to: email,
+    subject: subject,
+    text: body
+  };
+  
+  return new Promise((resolve, reject) => {
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        reject(error);
+      } else {
+        resolve('Email sent: ' + info.response);
+      }
+    });
+  });
+}
+
 
 module.exports = {
     GenerateAccessToken: GenerateAccessToken,
-    AuthenticateToken : AuthenticateToken
+    AuthenticateToken : AuthenticateToken,
+    GenerateOTP: GenerateOTP,
+    SendEmail, SendEmail
 };

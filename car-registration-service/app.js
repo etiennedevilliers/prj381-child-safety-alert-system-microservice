@@ -51,7 +51,7 @@ app.post('/RegisterCar', (req, res) => {
                     CarModel.create(car).then((result) => {
                         res.send({
                             'car':result,
-                            jwt : Auth.GenerateAccessToken(result.CarID)
+                            jwt : Auth.GenerateAccessToken({'numberplate': result.CarID})
                         });
                     });
                 }
