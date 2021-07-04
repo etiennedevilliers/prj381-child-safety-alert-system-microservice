@@ -1,4 +1,5 @@
-
+// Mongo Stuff
+var mongoose = require('mongoose');
 var CarModel = require('./Car').model;
 
 // Express stuff
@@ -29,17 +30,20 @@ app.post('/RegisterCar', (req, res) => {
     } else if (req.body['numberplate'] == null || req.body['numberplate'] === '')  {
         res.statusCode = 201;
         res.send(Errors.NoNumberPlate);
-
+    } else if (req.body['AllowedEmails'] == null || req.body['AllowedEmails'].length == 0 ) {
+        res.statusCode = 201;
+        res.send(Errors.MailError);
     } else {
         let car = {
             CarID : req.body['numberplate'],
+            AllowedEmails : req.body['AllowedEmails'],
             LastRecieved: Math.floor(new Date().getTime() / 1000),
             AuthorizationToken: GenerateToken()
         };
 
         CarModel(car).findByCarUid((err, cars) => {
             if (cars.length > 0) {
-                res.status(401).send({'error':'car already exists'});
+                res.status(401).send(Errors.CarAlreadyExists);
             } else {
                 CarModel.create(car).then((result) => {
                     res.send(result);
@@ -55,5 +59,5 @@ console.log("Connected to the Ludere DB:)");
 
 
 app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`)
+    console.log(`App listening at http://localhost:${port}`);
 });

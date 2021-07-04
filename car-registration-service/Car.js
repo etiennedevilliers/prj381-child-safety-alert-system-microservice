@@ -4,7 +4,12 @@ var mongoose = require('mongoose');
 var CarSchema = new mongoose.Schema({
     CarID : String,
     LastRecieved: Number,
-    AuthorizationToken: String
+    AuthorizationToken: String,
+    AllowedEmails : [ 
+        {
+            Email: String
+        }
+    ]
 });
 
 CarSchema.methods.findByCarUid = function(cb) {

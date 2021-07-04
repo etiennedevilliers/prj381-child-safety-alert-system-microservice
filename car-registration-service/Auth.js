@@ -1,5 +1,5 @@
 function GenerateToken() {
-    length = 40;
+    length = 120;
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
