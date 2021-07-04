@@ -1,6 +1,6 @@
 // Mongo Stuff
 var mongoose = require('mongoose');
-var CarModel = require('./Car').model;
+var CarModel = require('../Models/Car').model;
 
 // Express stuff
 const { query, request } = require('express');
@@ -18,7 +18,7 @@ const port = 3000
 GenerateToken = require('./Auth').GenerateToken;
 
 // Errors
-Errors = require('./Errors');
+Errors = require('../Errors');
 
 
 app.post('/RegisterCar', (req, res) => {

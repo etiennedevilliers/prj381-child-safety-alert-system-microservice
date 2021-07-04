@@ -10,9 +10,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.raw());
 const port = 3000
 
-app.post('/PhonePair', (req, res) => {
+app.post('/PairPhone', (req, res) => {
+    if (req.body['email'] == null) {
+        
+    }
 
-    
 });
 
 app.listen(port, () => {
