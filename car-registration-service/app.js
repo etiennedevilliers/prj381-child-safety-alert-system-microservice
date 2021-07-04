@@ -1,6 +1,6 @@
 // Mongo Stuff
 var mongoose = require('mongoose');
-var CarModel = require('../Models/Car').model;
+var CarModel = require('./Car').model;
 
 // Express stuff
 const { query, request } = require('express');
@@ -51,7 +51,7 @@ app.post('/RegisterCar', (req, res) => {
                     CarModel.create(car).then((result) => {
                         res.send({
                             'car':result,
-                            jwt : "random token"
+                            jwt : Auth.GenerateAccessToken(result.CarID)
                         });
                     });
                 }
@@ -61,12 +61,18 @@ app.post('/RegisterCar', (req, res) => {
 });
 
 console.log("Connecting to server...");
-mongoose.connect('mongodb://localhost/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
-    console.log("Connected to the Ludere DB:)");
-    app.listen(port, () => {
-        console.log(`App listening at http://localhost:${port}`);
+mongoose.connect('mongodb://localhost/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true})
+    .catch((err) => {
+        console.log(err)
+    })
+    .then(() => {
+        console.log("Connected to the Ludere DB:)");
+        app.listen(port, () => {
+            console.log(`App listening at http://localhost:${port}`);
+        });
     });
-}).catch((err) => {
-    console.log(err);
-});
+
+
+
+
 

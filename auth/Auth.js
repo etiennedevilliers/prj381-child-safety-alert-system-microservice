@@ -1,11 +1,8 @@
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 
-// get config vars
-dotenv.config();
 
 function GenerateAccessToken(carID) {
-    return jwt.sign(carID, process.env.TOKEN_SECRET, { });
+    return jwt.sign({'numberplate': carID}, process.env.TOKEN_SECRET, { });
 }
 
 function AuthenticateToken(req, res, next) {
