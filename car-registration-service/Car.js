@@ -2,12 +2,11 @@
 var mongoose = require('mongoose');
 
 var CarSchema = new mongoose.Schema({
-    CarID : String,
-    LastRecieved: Number,
-    AuthorizationToken: String,
-    AllowedEmails : [ 
+    numberplate : String,
+    lastRecieved: Number,
+    allowedEmails : [ 
         {
-            Email: String
+            email: String
         }
     ]
 });

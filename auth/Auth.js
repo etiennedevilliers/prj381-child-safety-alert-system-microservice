@@ -1,11 +1,13 @@
+require('dotenv').config()
+
 const jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'away12857@gmail.com',
-    pass: 'pxU6D3oOSz@gKugfZ#4D'
+    user: process.env.NODE_EMAIL,
+    pass: process.env.NODE_PASSWORD
   }
 });
 
@@ -41,7 +43,7 @@ function GenerateOTP() {
 
     return {
       token : generateRandomString(5), 
-      TokenID :generateRandomString(40)
+      tokenID :generateRandomString(40)
     };
 }
 

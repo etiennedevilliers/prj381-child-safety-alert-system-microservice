@@ -17,8 +17,9 @@ const Auth = require('../auth/Auth');
 // Mongoose stuff
 var mongoose = require('mongoose');
 const Token = require('./Token');
+const MobileApp = require('./MobileApp');
 
-app.post('/PairPhone', (req, res) => {
+app.post('/api/PairPhone', (req, res) => {
     if (req.body['email'] == null) {
         res.status(201).send(Errors.MailError);
     } else {
@@ -28,12 +29,14 @@ app.post('/PairPhone', (req, res) => {
             .then((response) => {
                 console.log(response);
                 Token.model.create({
-                    TokenID : token.TokenID,
-                    Email : req.body['email'],   
-                    Token : token.token,
-                    AttemptCounter : 0
+                    tokenID : token.tokenID,
+                    email : req.body['email'],   
+                    phoneNumber: req.body['phoneNumber'],
+	                fcmToken : req.body['fcmToken'],
+                    token : token.token,
+                    attemptCounter : 0
                 }).then(() => {
-                    res.send({'TokenID': token.TokenID});
+                    res.send({'tokenID': token.tokenID});
                 })
 
                 
@@ -45,26 +48,35 @@ app.post('/PairPhone', (req, res) => {
     }
 });
 
-app.post('/FinalisePair', (req, res) => {
-    let token_id = req.body['TokenID'];
+app.post('/api/FinalisePair', (req, res) => {
+    let token_id = req.body['tokenID'];
 
     if (token_id == null) {
         res.status(401).send(Errors.TokenIDNotSupplied);
     } else {
-        Token.model({'TokenID' : token_id}).findByID((err, tokens) => {
-            if (err) {
-                res.send(Errors.InternalServerError);
-            } else {
-                for (tokenID in tokens) {
-                    let token = tokens[tokenID];
-
-                    if (token.Token == req.body['token']) {
-                        res.send({
-                            'result' : 'success',
-                            'jwt' : Auth.GenerateAccessToken({'email': token.Email})
+        Token.model.findOne({'tokenID' : token_id})
+            .then((token) => {
+                if (token) {
+                    if (token.token == req.body['token']) {
+                        // Create MobileApp
+                        
+                        MobileApp.model.create({
+                            phoneNumber : token.phoneNumber,
+                            email : token.email,   
+                            fcmToken : token.fcmToken
+                        }).then((mobileApp) => {
+                            res.send({
+                                'result' : mobileApp,
+                                'jwt' : Auth.GenerateAccessToken({
+                                    email: mobileApp.email,
+                                    phoneNumber: mobileApp.phoneNumber
+                                })
+                            });
+                            token.remove();
+                        }).catch((err) => {
+                            console.error(err);
+                            res.status(500).send(Errors.InternalServerError);
                         });
-                        token.remove();
-                        return;
                     } else {
                         token.AttemptCounter += 1
                         if (token.AttemptCounter >= 3) {
@@ -73,14 +85,16 @@ app.post('/FinalisePair', (req, res) => {
                             token.save();
                         }
                     }
+                } else {
+                    res.status(401).send(Errors.InvalidToken);
                 }
-                
-                res.status(401).send(Errors.InvalidToken);
-            }
-        });
-    }
+            })
+            .catch((err) => {
+                console.error(err);
+                res.status(500).send(Errors.InternalServerError);
+            });
 
-    
+    }
 });
 
 console.log("Connecting to server...");

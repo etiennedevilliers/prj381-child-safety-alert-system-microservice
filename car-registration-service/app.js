@@ -30,14 +30,14 @@ app.post('/RegisterCar', (req, res) => {
     } else if (req.body['numberplate'] == null || req.body['numberplate'] === '')  {
         res.statusCode = 201;
         res.send(Errors.NoNumberPlate);
-    } else if (req.body['AllowedEmails'] == null) {
+    } else if (req.body['allowedEmails'] == null) {
         res.statusCode = 201;
         res.send(Errors.MailError);
     } else {
         let car = {
-            CarID : req.body['numberplate'],
-            AllowedEmails : req.body['AllowedEmails'],
-            LastRecieved: Math.floor(new Date().getTime() / 1000),
+            numberplate : req.body['numberplate'],
+            allowedEmails : req.body['allowedEmails'],
+            lastRecieved: Math.floor(new Date().getTime() / 1000),
         };
 
         CarModel(car).findByCarUid((err, cars) => {
@@ -51,7 +51,7 @@ app.post('/RegisterCar', (req, res) => {
                     CarModel.create(car).then((result) => {
                         res.send({
                             'car':result,
-                            jwt : Auth.GenerateAccessToken({'numberplate': result.CarID})
+                            jwt : Auth.GenerateAccessToken({'numberplate': result.numberplate})
                         });
                     });
                 }

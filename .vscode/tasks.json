@@ -6,7 +6,8 @@
         {
             "label": "Open tunnel to DB",
             "type": "shell",
-            "command": "ssh -L localhost:27017:localhost:27017 ubuntu@db.ludere.co.za",
+            //"command": "ssh -L localhost:27017:localhost:27017 ubuntu@db.ludere.co.za",
+            "command": "ssh -R 0.0.0.0:8080:localhost:3000 -N -f ubuntu@ludere.co.za",
             "problemMatcher": []
         }
     ]

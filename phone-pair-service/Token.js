@@ -2,15 +2,13 @@
 var mongoose = require('mongoose');
 
 var TokenSchema = new mongoose.Schema({
-    TokenID : String,
-    Email : String,   
-    Token : String,
-    AttemptCounter : Number
+    tokenID : String,
+    email : String,   
+    phoneNumber: String,
+	fcmToken : String,
+    token : String,
+    attemptCounter : Number
 });
-
-TokenSchema.methods.findByID = function(cb) {
-    return mongoose.model('Token').find({ TokenID: this.TokenID }, cb);
-};
 
 var TokenModel = mongoose.model('Token', TokenSchema);
 
