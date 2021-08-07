@@ -2,13 +2,14 @@ FROM node
 
 WORKDIR /usr/src/app
 
-COPY alert-service/package*.json ./alert-service/
+COPY ./alert-service ./alert-service
 
 RUN cd alert-service && npm install 
 
-COPY ./alert-service ./alert-service
-
 COPY ./auth ./auth
+
+RUN cd auth && npm install 
+
 COPY ./*.js ./
 
 EXPOSE 3000

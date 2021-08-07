@@ -2,13 +2,14 @@ FROM node
 
 WORKDIR /usr/src/app
 
-COPY phone-pair-service/package*.json ./phone-pair-service/
+COPY ./phone-pair-service ./phone-pair-service
 
 RUN cd phone-pair-service && npm install 
 
-COPY ./phone-pair-service ./phone-pair-service
-
 COPY ./auth ./auth
+
+RUN cd auth && npm install 
+
 COPY ./*.js ./
 
 EXPOSE 3000
