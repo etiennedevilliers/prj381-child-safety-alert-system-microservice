@@ -2,9 +2,12 @@
 var mongoose = require('mongoose');
 
 var TokenSchema = new mongoose.Schema({
-    TokenID :Number,
-    EmailID : Number,   
-    Token : String
+    tokenID : String,
+    email : String,   
+    phoneNumber: String,
+	fcmToken : String,
+    token : String,
+    attemptCounter : Number
 });
 
 var TokenModel = mongoose.model('Token', TokenSchema);

@@ -2,9 +2,9 @@
 var mongoose = require('mongoose');
 
 var MobileAppSchema = new mongoose.Schema({
-    MobileID :Number,
-    EmailID : Number,   
-    PushToken : String
+    phoneNumber :String,
+    email : String,   
+    fcmToken : String
 });
 
 var MobileAppModel = mongoose.model('MobileApp', MobileAppSchema);
