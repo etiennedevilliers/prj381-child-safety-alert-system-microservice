@@ -11,8 +11,6 @@ services:
             - .env
         networks:
             - child-safety-network
-        ports:
-            - 3000:3000
     car-registration-service: 
         build:
             context: .
@@ -40,8 +38,6 @@ services:
         restart: unless-stopped
         volumes:
             - db-data:/data/db
-        ports:
-            - "27017:27017"
         networks:
             - child-safety-network
     nginx:
