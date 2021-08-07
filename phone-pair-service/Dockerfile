@@ -4,6 +4,8 @@ WORKDIR /usr/src/app
 
 COPY phone-pair-service/package*.json ./
 
+RUN npm install npm@latest
+
 RUN npm install
 
 COPY ./phone-pair-service ./phone-pair-service
