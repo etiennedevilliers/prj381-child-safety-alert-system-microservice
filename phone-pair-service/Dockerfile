@@ -2,7 +2,7 @@ FROM node
 
 WORKDIR /usr/src/app
 
-COPY phone-pair-service/package*.json ./phone-pair-service
+COPY phone-pair-service/package*.json ./phone-pair-service/
 
 RUN cd phone-pair-service && npm install 
 

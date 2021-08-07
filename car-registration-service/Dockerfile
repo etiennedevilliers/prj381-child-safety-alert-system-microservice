@@ -2,7 +2,7 @@ FROM node
 
 WORKDIR /usr/src/app
 
-COPY car-registration-service/package*.json ./car-registration-service
+COPY car-registration-service/package*.json ./car-registration-service/
 
 RUN cd car-registration-service && npm install
 
