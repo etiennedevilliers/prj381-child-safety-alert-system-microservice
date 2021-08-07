@@ -1,15 +1,19 @@
 // Mongo Stuff
 var mongoose = require('mongoose');
 
-console.log("Connecting to server...");
-mongoose.connect('mongodb://db.ludere.co.za/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true});
-console.log("Connected to the Ludere DB:)");
-
 var CarSchema = new mongoose.Schema({
-    CarID : String,
-    LastRecieved: Number,
-    AuthorizationToken: String
+    numberplate : String,
+    lastRecieved: Number,
+    allowedEmails : [ 
+        {
+            email: String
+        }
+    ]
 });
+
+CarSchema.methods.findByCarUid = function(cb) {
+    return mongoose.model('Car').find({ CarID: this.CarID }, cb);
+};
 
 var CarModel = mongoose.model('Car', CarSchema);
 

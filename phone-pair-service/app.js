@@ -18,6 +18,7 @@ const Auth = require('../auth/Auth');
 var mongoose = require('mongoose');
 const Token = require('./Token');
 const MobileApp = require('./MobileApp');
+var CarModel = require('./Car').model;
 
 app.post('/api/PairPhone', (req, res) => {
     if (req.body['email'] == null) {
@@ -50,6 +51,8 @@ app.post('/api/PairPhone', (req, res) => {
 
 app.post('/api/FinalisePair', (req, res) => {
     let token_id = req.body['tokenID'];
+
+    console.log("/api/FinalisePair");
 
     if (token_id == null) {
         res.status(401).send(Errors.TokenIDNotSupplied);
@@ -84,6 +87,8 @@ app.post('/api/FinalisePair', (req, res) => {
                         } else {
                             token.save();
                         }
+
+                        res.status(401).send(Errors.InvalidToken);
                     }
                 } else {
                     res.status(401).send(Errors.InvalidToken);
@@ -95,6 +100,25 @@ app.post('/api/FinalisePair', (req, res) => {
             });
 
     }
+});
+
+app.get('/api/MyCars', Auth.AuthenticateToken, (req, res) => {
+    const payload = Auth.GetPayload(req);
+
+    CarModel({
+        allowedEmails : [
+            { email: payload.email }
+        ]
+    }).findByEmail((err, cars) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(Errors.InternalServerError);
+        } else {
+            res.status(200).send({
+                cars: cars
+            });
+        }
+    })
 });
 
 console.log("Connecting to server...");

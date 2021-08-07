@@ -67,10 +67,18 @@ function SendEmail(email, subject, body) {
   });
 }
 
+function GetPayload(req) { 
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+
+  return jwt.decode(token)
+}
+
 
 module.exports = {
     GenerateAccessToken: GenerateAccessToken,
     AuthenticateToken : AuthenticateToken,
     GenerateOTP: GenerateOTP,
-    SendEmail, SendEmail
+    SendEmail: SendEmail,
+    GetPayload: GetPayload
 };
