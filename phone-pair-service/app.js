@@ -20,7 +20,7 @@ const Token = require('./Token');
 const MobileApp = require('./MobileApp');
 var CarModel = require('./Car').model;
 
-app.post('/api/PairPhone', (req, res) => {
+app.post('/api/phone/PairPhone', (req, res) => {
     if (req.body['email'] == null) {
         res.status(201).send(Errors.MailError);
     } else {
@@ -49,10 +49,10 @@ app.post('/api/PairPhone', (req, res) => {
     }
 });
 
-app.post('/api/FinalisePair', (req, res) => {
+app.post('/api/phone/FinalisePair', (req, res) => {
     let token_id = req.body['tokenID'];
 
-    console.log("/api/FinalisePair");
+    console.log("/api/phone/FinalisePair");
 
     if (token_id == null) {
         res.status(401).send(Errors.TokenIDNotSupplied);
@@ -102,7 +102,7 @@ app.post('/api/FinalisePair', (req, res) => {
     }
 });
 
-app.get('/api/MyCars', Auth.AuthenticateToken, (req, res) => {
+app.get('/api/phone/MyCars', Auth.AuthenticateToken, (req, res) => {
     const payload = Auth.GetPayload(req);
 
     CarModel({
@@ -122,7 +122,7 @@ app.get('/api/MyCars', Auth.AuthenticateToken, (req, res) => {
 });
 
 console.log("Connecting to server...");
-mongoose.connect('mongodb://localhost/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://mongo/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true})
     .catch((err) => {
         console.log(err)
     })

@@ -21,7 +21,7 @@ const Auth = require('../auth/Auth');
 Errors = require('../Errors');
 
 
-app.post('/RegisterCar', (req, res) => {
+app.post('/api/carRegistration/RegisterCar', (req, res) => {
     console.log(req.body)
     if (req.body == null) {
         res.statusCode = 201;
@@ -61,7 +61,7 @@ app.post('/RegisterCar', (req, res) => {
 });
 
 console.log("Connecting to server...");
-mongoose.connect('mongodb://localhost/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://mongo/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true})
     .catch((err) => {
         console.log(err)
     })

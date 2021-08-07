@@ -24,7 +24,7 @@ const Auth = require('../auth/Auth');
 // Errors
 Errors = require('../Errors');
 
-app.post('/api/Alert', Auth.AuthenticateToken, (req, res) => {
+app.post('/api/alert', Auth.AuthenticateToken, (req, res) => {
     const payload = Auth.GetPayload(req);
 
     CarModel.findOne({
@@ -90,7 +90,7 @@ app.post('/api/Alert', Auth.AuthenticateToken, (req, res) => {
 });
 
 console.log("Connecting to server...");
-mongoose.connect('mongodb://localhost/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://mongo/childSafetyService', {useNewUrlParser: true, useUnifiedTopology: true})
     .catch((err) => {
         console.log(err)
     })
