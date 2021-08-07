@@ -4,9 +4,7 @@ WORKDIR /usr/src/app
 
 COPY alert-service/package*.json ./
 
-RUN npm install npm@latest
-
-RUN npm install
+RUN npm install 
 
 COPY ./alert-service ./alert-service
 
