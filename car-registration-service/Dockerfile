@@ -4,6 +4,8 @@ WORKDIR /usr/src/app
 
 COPY car-registration-service/package*.json ./
 
+RUN npm install -g npm@7.20.5
+
 RUN npm install
 
 COPY ./car-registration-service ./car-registration-service
