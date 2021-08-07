@@ -2,9 +2,9 @@ FROM node
 
 WORKDIR /usr/src/app
 
-COPY alert-service/package*.json ./
+COPY alert-service/package*.json ./alert-service
 
-RUN npm install 
+RUN cd alert-service && npm install 
 
 COPY ./alert-service ./alert-service
 
